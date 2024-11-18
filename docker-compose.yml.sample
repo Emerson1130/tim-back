@@ -1,0 +1,41 @@
+version: "3.8"
+
+#Docker Networks
+networks:
+  default:
+    external:
+      name: tim-network
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
+
+services:
+  #PHP Service
+  tim-api:
+    container_name: tim-api
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - 8802:80
+    volumes:
+      # - ${DOCKER_HOST_UPLOAD_PATH}:/var/www/html/storage/app/upload
+      - ./.docker/php/app.ini:/usr/local/etc/php/conf.d/app.ini
+      - ./:/var/www/html
+
+  #Database Service
+    tim-api-db:
+    container_name: tim-api-db
+    image: mariadb:10
+    restart: unless-stopped
+    ports:
+      - 8302:3306
+    environment:
+      MARIADB_DATABASE: db_tim
+      MARIADB_ROOT_PASSWORD: tim123
+      MARIADB_USER: usu_tim
+      MARIADB_PASSWORD: tim123
+    volumes:
+      - dbdata:/var/lib/mysql
