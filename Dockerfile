@@ -42,8 +42,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Copy existing application directory contents to the working directory
 COPY . /var/www/html
 
+# Create necessary directories if they don't exist
+RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Install PHP dependencies using Composer
 RUN composer install --optimize-autoloader --no-dev
 
+# Cache configuration and routes
 RUN php artisan config:cache && php artisan route:cache
 
 # Assign permissions of the working directory to the www-data user
@@ -52,6 +57,6 @@ RUN chown -R www-data:www-data \
     /var/www/html/storage \
     /var/www/html/bootstrap/cache
 
-# Expose port 9000 and start php-fpm server (for FastCGI Process Manager)
+# Expose port 80 and start Apache
 EXPOSE 80
 CMD ["apache2-foreground"]

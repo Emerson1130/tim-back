@@ -16,7 +16,13 @@ git clone https://github.com/Emerson1130/tim-back.git
 cd tim-back
 ```
 Duplique o arquivo ou o renomeie para:
-```shelldocker-compose.yml.sample```
+```
+docker-compose.yml
+```
+Construir a imagem sem cache:
+```shell
+docker compose build --no-cache
+```
 
 Suba o container:
 
