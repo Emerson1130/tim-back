@@ -3,8 +3,7 @@ version: "3.8"
 #Docker Networks
 networks:
   default:
-    external:
-      name: tim-network
+    driver: bridge 
 
 #Volumes
 volumes:
@@ -26,7 +25,7 @@ services:
       - ./:/var/www/html
 
   #Database Service
-    tim-api-db:
+  tim-api-db:
     container_name: tim-api-db
     image: mariadb:10
     restart: unless-stopped

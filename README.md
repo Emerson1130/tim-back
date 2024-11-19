@@ -15,12 +15,9 @@ git clone https://github.com/Emerson1130/tim-back.git
 
 cd tim-back
 ```
+Duplique o arquivo ou o renomeie para:
+```shelldocker-compose.yml.sample```
 
-Gere a imagem do projeto:
-
-```shell
-docker compose build --no-cache
-```
 Suba o container:
 
 ```shell
@@ -33,15 +30,31 @@ docker ps
 
 Entre no container:
 ```shell
-docker exec -it tim-back bash
+docker exec -it tim-api bash
 ```
 
 Execute o comando:
 ```shell
 composer install
 ```
+### Permissão na pasta upload
 
-Agora o projeto está rodando na porta 8802.
+Na primeira instalação, permita que o usuário www-data ou apache tenha acesso de escrita na storage (isso dará permissão
+no volume compartilhado).
+
+```shell
+chown -R www-data:www-data \
+    /var/www/html/vendor \
+    /var/www/html/storage \
+    /var/www/html/bootstrap/cache
+```
+
+### Agora o projeto está rodando na porta 8802.
+
+Teste no navegador:
+```shell
+http://localhost:8802/api/consultar-cep?cep=70701050
+```
 
 ### Gerando um APP_KEY CASO NÃO TENHA
 
@@ -59,15 +72,5 @@ Copie o valor da chave "APP_KEY" do .env que está no container:
 docker exec -it tim-back cat .env | grep APP_KEY=
 ```
 
-### Permissão na pasta upload
 
-Na primeira instalação, permita que o usuário www-data ou apache tenha acesso de escrita na storage (isso dará permissão
-no volume compartilhado).
-
-```shell
-chown -R www-data:www-data \
-    /var/www/html/vendor \
-    /var/www/html/storage \
-    /var/www/html/bootstrap/cache
-```
 
